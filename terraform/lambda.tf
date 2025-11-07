@@ -21,6 +21,25 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+## Call Bedrock Auth
+resource "aws_iam_role_policy" "lambda_bedrock" {
+    name = "lambda-bedrock-policy"
+    role = aws_iam_role.lambda_exec.id
+
+    policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [
+        {
+            Action = [
+                "bedrock:InvokeModel"
+            ]
+            Resource = "*"
+            Effect = "Allow"
+        }
+        ]
+    })
+}
+
 resource "aws_lambda_function" "cm_predict" {
   function_name = "cm-predict-handler"
   role          = aws_iam_role.lambda_exec.arn
