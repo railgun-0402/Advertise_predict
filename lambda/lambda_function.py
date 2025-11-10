@@ -15,6 +15,7 @@ def handler(event, context):
         except json.JSONDecodeError:
             body = {"raw": event["body"]}
 
+    # TODO: ここを動的にする
     user_query = body.get("query", "CMのROI予測について簡単に説明してください")
 
     # Bedrockに投げるpayload作成
@@ -42,6 +43,7 @@ def handler(event, context):
     # レスポンス取り出し
     resp_body = json.loads(response["body"].read())
     # Claude v3系は content の中に text が入る
+    # TODO: textだけでなく、UIに合わせて必要な値を取得する
     bedrock_answer = ""
     if "content" in resp_body and len(resp_body["content"]) > 0:
         bedrock_answer = resp_body["content"][0]["text"]
