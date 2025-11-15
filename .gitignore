@@ -1,0 +1,7 @@
+*.zip
+*.terraform
+*.tfstate*
+*.gz
+*.hcl
+*terraform.tfstate
+container.json

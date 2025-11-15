@@ -37,3 +37,9 @@ url -X POST https://xxx/dev/predict -d '{"query":"〜を教えて"}' -H 'Content
   "answer": "〜できます。"
 }
 ```
+
+## Docs
+
+- [Bedrock 連携手順](docs/bedrock_integration.md)
+- [SageMaker クイックスタート](docs/sagemaker_quickstart.md)
+- [アーキテクチャ概要](docs/architecture.md)
