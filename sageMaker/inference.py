@@ -19,7 +19,7 @@ def predict_fn(input_data, model):
     # 本当ならここでXGBoostなどを使う
     # 今回はダミーで固定値を返す
     return {
-        "predicted_roi": 0.25,
+        "predicted_roi": 0.23,
         "received": input_data
     }
 

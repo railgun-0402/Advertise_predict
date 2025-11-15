@@ -4,3 +4,4 @@
 *.gz
 *.hcl
 *terraform.tfstate
+container.json
