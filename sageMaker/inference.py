@@ -24,7 +24,6 @@ def input_fn(request_body, content_type):
     # 今回は「学習モデルに渡す値」として spots を使う想定。
     spots = data.get("spots")
     if spots is None:
-        # spots がない時はダミー値 or エラーにしても良い
         raise ValueError("spots が指定されていません")
 
     return float(spots)
