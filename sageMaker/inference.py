@@ -40,7 +40,4 @@ def predict_fn(input_data, model):
     }
 
 def output_fn(prediction, accept):
-    """
-    レスポンスとして返す JSON 文字列を生成。
-    """
     return json.dumps(prediction)
