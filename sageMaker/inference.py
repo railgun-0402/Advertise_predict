@@ -20,8 +20,8 @@ def input_fn(request_body, content_type):
     """
     data = json.loads(request_body)
 
-    # 万人向けに message/value も受け取れるようにしておくならこんな感じでもOK
-    # 今回は「学習モデルに渡す値」として spots を使う想定。
+    # 万人向けに message/value も受け取れるようにしておく感じにしておく
+    # 今回は「学習モデルに渡す値」として spots を使う
     spots = data.get("spots")
     if spots is None:
         raise ValueError("spots が指定されていません")
