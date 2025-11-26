@@ -1,28 +1,43 @@
+# inference.py
 import json
+import joblib
+import os
 
-# SageMakerのスクリプトモードでは、`inference.py` に `model_fn`, `input_fn`, `predict_fn`, `output_fn` を書いておくとそれを使って推論できるらしい
-
-# 何を使って推論するかをロードする
 def model_fn(model_dir):
-    # 学習済みモデル実装時に追加
-    return None
+    """
+    SageMaker がコンテナ起動時に呼ぶ。
+    ここで学習済みモデルを読み込んで返す。
+    model_dir は /opt/ml/model が渡ってくる想定。
+    """
+    model_path = os.path.join(model_dir, "model.joblib")
+    model = joblib.load(model_path)
+    return model
 
-# リクエストをPythonオブジェクト変換
 def input_fn(request_body, content_type):
-    # 本来はAPI GatewayとかBedrockからJSONを取得する
-    if content_type == "application/json":
-        return json.loads(request_body)
-    return request_body
+    """
+    エンドポイントに届いたリクエストボディを Python オブジェクトに変換。
+    今回は JSON 前提で "spots" を取り出す例にしています。
+    """
+    data = json.loads(request_body)
 
-# 予測を実行する
+    # 万人向けに message/value も受け取れるようにしておく感じにしておく
+    # 今回は「学習モデルに渡す値」として spots を使う
+    spots = data.get("spots")
+    if spots is None:
+        raise ValueError("spots が指定されていません")
+
+    return float(spots)
+
 def predict_fn(input_data, model):
-    # 本当ならここでXGBoostなどを使う
-    # 今回はダミーで固定値を返す
+    """
+    input_fn の戻り値 (spots) と model を受け取り、モデルで推論を実行。
+    """
+    # input_data は単一の float を想定
+    pred = model.predict([[input_data]])[0]
     return {
-        "predicted_roi": 0.23,
-        "received": input_data
+        "predicted_roi": float(pred),
+        "input_spots": input_data
     }
 
-# 結果をHTTPレスポンスように整形する
 def output_fn(prediction, accept):
     return json.dumps(prediction)
